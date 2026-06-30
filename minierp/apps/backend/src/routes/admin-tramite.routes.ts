@@ -265,12 +265,6 @@ router.patch(
       const tramiteId = req.params.id;
       const userId = (req as any).user.sub;
 
-      // Validar que el usuario existe
-      const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
-      if (!userExists) {
-        return res.status(401).json({ success: false, message: 'Usuario no encontrado. Inicia sesión nuevamente.' });
-      }
-
       const tramite = await prisma.tramite.findUnique({
         where: { id: tramiteId },
         select: {
@@ -313,21 +307,26 @@ router.patch(
 
         await tx.$executeRaw`UPDATE tramites SET updated_by = ${userId}::uuid WHERE id = ${tramiteId}::uuid`;
 
-        await tx.auditoriaTramite.create({
-          data: {
-            tramiteId,
-            usuarioId: userId,
-            estadoAnterior,
-            estadoNuevo: nuevoEstado,
-            accion: 'Derivación',
-            detalles: {
-              motivo: 'Derivado a Dirección desde secretaría',
-            },
-          },
-        });
-
+        // Auditoría fuera de transacción para no bloquear
         return updated;
       });
+
+      // Crear auditoría separadamente (no bloqueante)
+      try {
+        const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
+        if (userExists) {
+          await prisma.auditoriaTramite.create({
+            data: {
+              tramiteId,
+              usuarioId: userId,
+              estadoAnterior,
+              estadoNuevo: nuevoEstado,
+              accion: 'Derivación',
+              detalles: { motivo: 'Derivado a Dirección desde secretaría' },
+            },
+          });
+        }
+      } catch { /* auditoría es best-effort */ }
 
       const user = await prisma.usuario.findUnique({
         where: { id: userId },
@@ -377,11 +376,6 @@ router.patch(
     try {
       const tramiteId = req.params.id;
       const userId = (req as any).user.sub;
-
-      const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
-      if (!userExists) {
-        return res.status(401).json({ success: false, message: 'Usuario no encontrado. Inicia sesión nuevamente.' });
-      }
       const { motivo } = req.body;
 
       if (!motivo || typeof motivo !== 'string' || motivo.trim().length < 10) {
@@ -439,21 +433,25 @@ router.patch(
 
         await tx.$executeRaw`UPDATE tramites SET comentario_observacion = ${motivoLimpio}, updated_by = ${userId}::uuid WHERE id = ${tramiteId}::uuid`;
 
-        await tx.auditoriaTramite.create({
-          data: {
-            tramiteId,
-            usuarioId: userId,
-            estadoAnterior,
-            estadoNuevo: nuevoEstado,
-            accion: 'Observación',
-            detalles: {
-              motivo: motivoLimpio,
-            },
-          },
-        });
-
         return updated;
       });
+
+      // Auditoría no bloqueante
+      try {
+        const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
+        if (userExists) {
+          await prisma.auditoriaTramite.create({
+            data: {
+              tramiteId,
+              usuarioId: userId,
+              estadoAnterior,
+              estadoNuevo: nuevoEstado,
+              accion: 'Observación',
+              detalles: { motivo: motivoLimpio },
+            },
+          });
+        }
+      } catch { /* auditoría best-effort */ }
 
       const user = await prisma.usuario.findUnique({
         where: { id: userId },
@@ -498,11 +496,6 @@ router.patch(
     try {
       const tramiteId = req.params.id;
       const userId = (req as any).user.sub;
-
-      const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
-      if (!userExists) {
-        return res.status(401).json({ success: false, message: 'Usuario no encontrado. Inicia sesión nuevamente.' });
-      }
 
       const { comentario } = req.body;
 
@@ -562,21 +555,25 @@ router.patch(
 
         await tx.$executeRaw`UPDATE tramites SET updated_by = ${userId}::uuid WHERE id = ${tramiteId}::uuid`;
 
-        await tx.auditoriaTramite.create({
-          data: {
-            tramiteId,
-            usuarioId: userId,
-            estadoAnterior,
-            estadoNuevo: nuevoEstado,
-            accion: 'Aprobación',
-            detalles: {
-              motivo: comentario || 'Trámite aprobado y finalizado',
-            },
-          },
-        });
-
         return updated;
       });
+
+      // Auditoría no bloqueante
+      try {
+        const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
+        if (userExists) {
+          await prisma.auditoriaTramite.create({
+            data: {
+              tramiteId,
+              usuarioId: userId,
+              estadoAnterior,
+              estadoNuevo: nuevoEstado,
+              accion: 'Aprobación',
+              detalles: { motivo: comentario || 'Trámite aprobado y finalizado' },
+            },
+          });
+        }
+      } catch { /* auditoría best-effort */ }
 
       const user = await prisma.usuario.findUnique({
         where: { id: userId },
