@@ -3,8 +3,14 @@ import { tokenService } from '../domains/identity/services/token.service';
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Extraer token de cookie
-    const token = req.cookies?.accessToken;
+    let token = req.cookies?.accessToken;
+
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
 
     if (!token) {
       return res.status(401).json({

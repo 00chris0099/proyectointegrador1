@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -49,7 +50,7 @@ export default function TramitesPage() {
 
   const fetchTramites = useCallback(async () => {
     try {
-      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/me`, {
+      const res = await authFetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/me`, {
         credentials: 'include',
       });
       const data = await res.json();

@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -60,7 +61,7 @@ export default function TramiteDetailPage() {
 
   const fetchTramite = async () => {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${tramiteId}`,
         { credentials: 'include' }
       );

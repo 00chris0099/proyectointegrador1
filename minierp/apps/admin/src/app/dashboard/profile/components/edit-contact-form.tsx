@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState } from 'react';
@@ -57,7 +58,7 @@ export default function EditContactForm({
         payload.telefono = data.telefono;
       }
       if (data.email !== currentEmail) {
-        const verifyRes = await fetch(
+        const verifyRes = await authFetch(
           `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile/verify-email`,
           {
             method: 'POST',
@@ -81,7 +82,7 @@ export default function EditContactForm({
       }
 
       if (Object.keys(payload).length > 0) {
-        const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile`, {
+        const res = await authFetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -108,7 +109,7 @@ export default function EditContactForm({
   const handleVerifyCode = async () => {
     setIsSubmitting(true);
     try {
-      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile/confirm-email`, {
+      const res = await authFetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile/confirm-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

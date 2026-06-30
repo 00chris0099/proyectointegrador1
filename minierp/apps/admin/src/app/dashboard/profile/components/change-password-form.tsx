@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState } from 'react';
@@ -65,7 +66,7 @@ export default function ChangePasswordForm({ onUpdated }: ChangePasswordFormProp
     setMessage(null);
 
     try {
-      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile/password`, {
+      const res = await authFetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile/password`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

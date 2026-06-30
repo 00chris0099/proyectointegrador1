@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -105,7 +106,7 @@ export default function AuditoriaPage() {
       if (fechaInicio) params.append('fecha_inicio', fechaInicio);
       if (fechaFin) params.append('fecha_fin', fechaFin);
 
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/auditoria?${params.toString()}`,
         { credentials: 'include' }
       );
@@ -126,7 +127,7 @@ export default function AuditoriaPage() {
 
   const fetchEstadisticas = useCallback(async () => {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/auditoria/estadisticas`,
         { credentials: 'include' }
       );
@@ -141,7 +142,7 @@ export default function AuditoriaPage() {
 
   const fetchAcciones = useCallback(async () => {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/auditoria/acciones`,
         { credentials: 'include' }
       );

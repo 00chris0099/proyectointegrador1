@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { getAccessToken } from '@/lib/api';
 
 export interface TramiteSSEEvent {
   tramiteId: string;
@@ -64,7 +65,8 @@ export function useTramiteSSE(
     }
 
     const api_url = 'https://aimachristian-backendintegrador.ajcxjb.easypanel.host';
-    const eventSource = new EventSource(`${api_url}/api/tramites/stream`, {
+    const token = getAccessToken();
+    const eventSource = new EventSource(`${api_url}/api/tramites/stream?token=${token || ''}`, {
       withCredentials: true,
     });
 

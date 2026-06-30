@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -96,7 +97,7 @@ export default function SolicitudesVinculacionPage() {
   const handleApprove = async (id: number) => {
     setProcessingId(id);
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/solicitudes-vinculacion/${id}/aprobar`,
         {
           method: 'PATCH',
@@ -127,7 +128,7 @@ export default function SolicitudesVinculacionPage() {
     
     setProcessingId(selectedSolicitud.id);
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/solicitudes-vinculacion/${selectedSolicitud.id}/rechazar`,
         {
           method: 'PATCH',

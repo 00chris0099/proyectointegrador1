@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -27,7 +28,7 @@ export default function FiltrosToolbar({ onFilterChange }: FiltrosToolbarProps) 
   useEffect(() => {
     const fetchTipos = async () => {
       try {
-        const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/tipos`, {
+        const res = await authFetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/tipos`, {
           credentials: 'include',
         });
         const data = await res.json();

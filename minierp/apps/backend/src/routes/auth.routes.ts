@@ -31,7 +31,11 @@ router.post('/login', rateLimiter, async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      data: result.user
+      data: {
+        ...result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken
+      }
     });
   } catch (error: any) {
     res.status(401).json({

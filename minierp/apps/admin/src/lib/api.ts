@@ -1,103 +1,67 @@
 const API_URL = 'https://aimachristian-backendintegrador.ajcxjb.easypanel.host';
 
-async function fetchApi<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const res = await fetch(`${API_URL}${endpoint}`, {
-    credentials: 'include',
-    ...options,
-  });
+export function getAccessToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('accessToken');
+}
 
-  const data = await res.json();
+export function setAccessToken(token: string) {
+  localStorage.setItem('accessToken', token);
+}
 
-  if (!res.ok) {
-    throw new Error(data.message || 'Error en la petición');
+export function clearAccessToken() {
+  localStorage.removeItem('accessToken');
+}
+
+function authHeaders(): Record<string, string> {
+  const token = getAccessToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+export async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  const headers = { ...authHeaders(), ...(options.headers as Record<string, string> || {}) };
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
   }
+  return fetch(url.startsWith('http') ? url : `${API_URL}${url}`, { ...options, headers });
+}
 
+async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const res = await authFetch(endpoint, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Error en la petición');
   return data;
 }
 
-export interface UploadResult {
-  url: string;
-  deleteUrl: string;
-  filename: string;
-  mimetype: string;
-  size: number;
-}
-
-export interface DocumentoInfo {
-  id: number;
-  urlArchivo: string;
-  nombreOriginal: string;
-  tipoMime: string;
-  pesoBytes: number;
-  createdAt: string;
-}
+export interface UploadResult { url: string; deleteUrl: string; filename: string; mimetype: string; size: number; }
+export interface DocumentoInfo { id: number; urlArchivo: string; nombreOriginal: string; tipoMime: string; pesoBytes: number; createdAt: string; }
 
 export async function uploadFile(file: File): Promise<UploadResult> {
   const formData = new FormData();
   formData.append('file', file);
-
-  const res = await fetch(`${API_URL}/api/upload`, {
-    method: 'POST',
-    credentials: 'include',
-    body: formData,
-  });
-
+  const res = await authFetch(`${API_URL}/api/upload`, { method: 'POST', body: formData });
   const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message || 'Error al subir archivo');
-  }
-
+  if (!res.ok) throw new Error(data.message || 'Error al subir archivo');
   return data.data;
 }
 
-export async function addDocumentoToTramite(
-  tramiteId: string,
-  file: File
-): Promise<void> {
+export async function addDocumentoToTramite(tramiteId: string, file: File): Promise<void> {
   const formData = new FormData();
   formData.append('file', file);
-
-  const res = await fetch(`${API_URL}/api/tramites/${tramiteId}/documentos`, {
-    method: 'POST',
-    credentials: 'include',
-    body: formData,
-  });
-
+  const res = await authFetch(`${API_URL}/api/tramites/${tramiteId}/documentos`, { method: 'POST', body: formData });
   const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message || 'Error al agregar documento');
-  }
+  if (!res.ok) throw new Error(data.message || 'Error al agregar documento');
 }
 
 export async function getDocumentos(tramiteId: string): Promise<DocumentoInfo[]> {
-  const data = await fetchApi<{ success: boolean; data: DocumentoInfo[] }>(
-    `/api/tramites/${tramiteId}/documentos`
-  );
+  const data = await fetchApi<{ success: boolean; data: DocumentoInfo[] }>(`/api/tramites/${tramiteId}/documentos`);
   return data.data;
 }
 
-export async function deleteDocumento(
-  tramiteId: string,
-  docId: number
-): Promise<void> {
-  const res = await fetch(
-    `${API_URL}/api/tramites/${tramiteId}/documentos/${docId}`,
-    {
-      method: 'DELETE',
-      credentials: 'include',
-    }
-  );
-
+export async function deleteDocumento(tramiteId: string, docId: number): Promise<void> {
+  const res = await authFetch(`${API_URL}/api/tramites/${tramiteId}/documentos/${docId}`, { method: 'DELETE' });
   const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message || 'Error al eliminar documento');
-  }
+  if (!res.ok) throw new Error(data.message || 'Error al eliminar documento');
 }
 
 export function formatFileSize(bytes: number): string {

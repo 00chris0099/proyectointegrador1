@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState } from 'react';
@@ -81,7 +82,7 @@ export default function LinkingRequestForm({ onSubmitted }: LinkingRequestFormPr
         payload.parentescoCustom = data.parentescoCustom;
       }
 
-      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/apoderados/me/solicitud`, {
+      const res = await authFetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/apoderados/me/solicitud`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

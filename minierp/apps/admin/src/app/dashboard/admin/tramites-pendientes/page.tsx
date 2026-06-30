@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -107,7 +108,7 @@ export default function TramitesPendientesPage() {
       if (filters.tipo_tramite) params.append('tipo_tramite', filters.tipo_tramite);
       if (filters.search) params.append('search', filters.search);
 
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/tramites/pendientes?${params.toString()}`,
         { credentials: 'include' }
       );
@@ -128,7 +129,7 @@ export default function TramitesPendientesPage() {
 
   const fetchEstadisticas = useCallback(async () => {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/tramites/estadisticas`,
         { credentials: 'include' }
       );
@@ -174,7 +175,7 @@ export default function TramitesPendientesPage() {
 
   const handleViewDetail = async (tramite: TramitePendiente) => {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/tramites/${tramite.id}/detalle`,
         { credentials: 'include' }
       );
@@ -207,7 +208,7 @@ export default function TramitesPendientesPage() {
 
     setDerivandoLoading(true);
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${derivandoTramiteId}/derivar`,
         {
           method: 'PATCH',
@@ -257,7 +258,7 @@ export default function TramitesPendientesPage() {
 
     setObservandoLoading(true);
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${observandoTramiteId}/observar`,
         {
           method: 'PATCH',

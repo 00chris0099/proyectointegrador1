@@ -6,7 +6,11 @@ const router = Router();
 
 router.get('/tramites/stream', (req: Request, res: Response) => {
   try {
-    const token = req.cookies?.accessToken;
+    let token = req.cookies?.accessToken;
+
+    if (!token) {
+      token = req.query.token as string;
+    }
 
     if (!token) {
       return res.status(401).json({

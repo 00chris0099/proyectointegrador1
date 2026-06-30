@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -26,7 +27,7 @@ export default function ProfilePage() {
 
   const fetchProfile = useCallback(async () => {
     try {
-      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile`, {
+      const res = await authFetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile`, {
         credentials: 'include',
       });
       const data = await res.json();

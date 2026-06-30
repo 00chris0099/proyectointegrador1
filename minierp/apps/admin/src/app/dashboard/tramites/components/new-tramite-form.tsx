@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -105,7 +106,7 @@ export default function NewTramiteForm({ onSubmitted, onCancel }: NewTramiteForm
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites`, {
+      const res = await authFetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -125,7 +126,7 @@ export default function NewTramiteForm({ onSubmitted, onCancel }: NewTramiteForm
           const formData = new FormData();
           formData.append('file', file);
 
-          const uploadRes = await fetch(
+          const uploadRes = await authFetch(
             `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${tramiteId}/documentos`,
             {
               method: 'POST',

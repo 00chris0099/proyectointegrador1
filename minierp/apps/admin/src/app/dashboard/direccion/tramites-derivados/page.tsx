@@ -1,3 +1,4 @@
+import { authFetch } from '@/lib/api';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -94,7 +95,7 @@ export default function TramitesDerivadosPage() {
       params.append('page', page.toString());
       params.append('limit', '20');
 
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/direccion/tramites/derivados?${params.toString()}`,
         { credentials: 'include' }
       );
@@ -115,7 +116,7 @@ export default function TramitesDerivadosPage() {
 
   const fetchEstadisticas = useCallback(async () => {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/direccion/tramites/estadisticas`,
         { credentials: 'include' }
       );
@@ -153,7 +154,7 @@ export default function TramitesDerivadosPage() {
 
   const handleViewDetail = async (tramite: TramiteDerivado) => {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/direccion/tramites/${tramite.id}/detalle`,
         { credentials: 'include' }
       );
@@ -186,7 +187,7 @@ export default function TramitesDerivadosPage() {
 
     setAprobandoLoading(true);
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${aprobandoTramiteId}/aprobar`,
         {
           method: 'PATCH',
@@ -227,7 +228,7 @@ export default function TramitesDerivadosPage() {
 
   const handleDescargarConstancia = async (tramiteId: string) => {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/direccion/tramites/${tramiteId}/constancia`,
         { credentials: 'include' }
       );
