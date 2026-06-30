@@ -1,9 +1,12 @@
+# Build: 2026-06-30 fix1
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY minierp/apps/backend/package*.json ./
 RUN npm install
-COPY minierp/apps/backend/ .
+COPY minierp/apps/backend/prisma ./prisma
 RUN npx prisma generate
+COPY minierp/apps/backend/src ./src
+COPY minierp/apps/backend/tsconfig.json ./
 RUN npm run build
 
 FROM node:20-alpine AS runner
