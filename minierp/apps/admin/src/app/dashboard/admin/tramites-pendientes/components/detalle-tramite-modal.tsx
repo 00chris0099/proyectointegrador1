@@ -66,6 +66,8 @@ interface DetalleTramiteModalProps {
 export default function DetalleTramiteModal({ tramite, isOpen, onClose, onDerivar, onObservar }: DetalleTramiteModalProps) {
   if (!isOpen || !tramite) return null;
 
+  const t = tramite as TramiteDetalle;
+
   const formatFecha = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('es-PE', {
       day: '2-digit',
@@ -104,24 +106,24 @@ export default function DetalleTramiteModal({ tramite, isOpen, onClose, onDeriva
           <div className="space-y-6">
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="flex items-center gap-4 mb-3">
-                <span className="font-mono text-lg font-bold text-gray-900">{tramite.idSeguimiento}</span>
-                {tramite.estado === 'Observado' ? (
+                <span className="font-mono text-lg font-bold text-gray-900">{t.idSeguimiento}</span>
+                {t.estado === 'Observado' ? (
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">
                     <AlertCircle size={14} />
-                    {tramite.estado}
+                    {t.estado}
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
                     <Clock size={14} />
-                    {tramite.estado}
+                    {t.estado}
                   </span>
                 )}
               </div>
               <p className="text-sm text-gray-600">
-                <span className="font-medium">Tipo:</span> {tramite.tipo.nombre}
+                <span className="font-medium">Tipo:</span> {t.tipo.nombre}
               </p>
-              {tramite.tipo.descripcion && (
-                <p className="text-sm text-gray-500 mt-1">{tramite.tipo.descripcion}</p>
+              {t.tipo.descripcion && (
+                <p className="text-sm text-gray-500 mt-1">{t.tipo.descripcion}</p>
               )}
             </div>
 
@@ -131,11 +133,11 @@ export default function DetalleTramiteModal({ tramite, isOpen, onClose, onDeriva
                   <User size={16} />
                   Apoderado
                 </h3>
-                <p className="text-sm text-blue-800">{tramite.apoderado.nombres} {tramite.apoderado.apellidos}</p>
-                <p className="text-xs text-blue-600 mt-1">DNI: {tramite.apoderado.dni}</p>
-                <p className="text-xs text-blue-600">{tramite.apoderado.email}</p>
-                {tramite.apoderado.telefono && (
-                  <p className="text-xs text-blue-600">Tel: {tramite.apoderado.telefono}</p>
+                <p className="text-sm text-blue-800">{t.apoderado.nombres} {t.apoderado.apellidos}</p>
+                <p className="text-xs text-blue-600 mt-1">DNI: {t.apoderado.dni}</p>
+                <p className="text-xs text-blue-600">{t.apoderado.email}</p>
+                {t.apoderado.telefono && (
+                  <p className="text-xs text-blue-600">Tel: {t.apoderado.telefono}</p>
                 )}
               </div>
 
@@ -144,37 +146,37 @@ export default function DetalleTramiteModal({ tramite, isOpen, onClose, onDeriva
                   <GraduationCap size={16} />
                   Alumno
                 </h3>
-                <p className="text-sm text-green-800">{tramite.alumno.nombres} {tramite.alumno.apellidos}</p>
-                <p className="text-xs text-green-600 mt-1">DNI: {tramite.alumno.dni}</p>
-                <p className="text-xs text-green-600">{tramite.alumno.nivel} {tramite.alumno.grado}° {tramite.alumno.seccion}</p>
+                <p className="text-sm text-green-800">{t.alumno.nombres} {t.alumno.apellidos}</p>
+                <p className="text-xs text-green-600 mt-1">DNI: {t.alumno.dni}</p>
+                <p className="text-xs text-green-600">{t.alumno.nivel} {t.alumno.grado}° {t.alumno.seccion}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <span className="flex items-center gap-1">
                 <Calendar size={14} className="text-gray-400" />
-                Creado: {formatFecha(tramite.fechaCreacion)}
+                Creado: {formatFecha(t.fechaCreacion)}
               </span>
-              {tramite.fechaCulminacion && (
+              {t.fechaCulminacion && (
                 <span className="flex items-center gap-1">
                   <Calendar size={14} className="text-gray-400" />
-                  Culminado: {formatFecha(tramite.fechaCulminacion)}
+                  Culminado: {formatFecha(t.fechaCulminacion)}
                 </span>
               )}
             </div>
 
-            {tramite.comentario && (
+            {t.comentario && (
               <div className="bg-yellow-50 rounded-lg p-4">
                 <h3 className="text-sm font-semibold text-yellow-900 mb-1">Comentario del Apoderado</h3>
-                <p className="text-sm text-yellow-800">{tramite.comentario}</p>
+                <p className="text-sm text-yellow-800">{t.comentario}</p>
               </div>
             )}
 
-            {tramite.documentos.length > 0 && (
+            {t.documentos.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Documentos Adjuntos ({tramite.documentos.length})</h3>
+                <h3 className="text-sm font-semibold text-gray-900 mb-3">Documentos Adjuntos ({t.documentos.length})</h3>
                 <div className="space-y-2">
-                  {tramite.documentos.map((doc) => (
+                  {t.documentos.map((doc) => (
                     <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center gap-3">
                         <FileText size={16} className="text-gray-400" />
@@ -198,14 +200,14 @@ export default function DetalleTramiteModal({ tramite, isOpen, onClose, onDeriva
               </div>
             )}
 
-            {tramite.auditoria && tramite.auditoria.length > 0 && (
+            {t.auditoria && t.auditoria.length > 0 && (
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <History size={16} />
                   Historial de Cambios
                 </h3>
                 <div className="space-y-2">
-                  {tramite.auditoria.map((entry) => (
+                  {t.auditoria.map((entry) => (
                     <div key={entry.id} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center justify-between">
                         <p className="text-sm text-gray-900">
@@ -228,18 +230,18 @@ export default function DetalleTramiteModal({ tramite, isOpen, onClose, onDeriva
 
           <div className="mt-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              {(tramite.estado === 'Pendiente' || tramite.estado === 'Observado') && onDerivar && (
+              {(t.estado === 'Pendiente' || t.estado === 'Observado') && onDerivar && (
                 <button
-                  onClick={() => onDerivar(tramite.id)}
+                  onClick={() => onDerivar(t.id)}
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
                 >
                   <Send size={16} />
                   Derivar a Dirección
                 </button>
               )}
-              {tramite.estado === 'Pendiente' && onObservar && (
+              {t.estado === 'Pendiente' && onObservar && (
                 <button
-                  onClick={() => onObservar(tramite.id)}
+                  onClick={() => onObservar(t.id)}
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-orange-700 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                 >
                   <AlertCircle size={16} />
