@@ -25,7 +25,7 @@ interface TramiteDetalle {
     nivel: string;
     grado: number;
     seccion: string;
-    fechaNac: string | null;
+    fechaNac?: string | null;
   };
   tipo: {
     id: number;
