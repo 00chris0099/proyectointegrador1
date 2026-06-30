@@ -1,0 +1,393 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== BOUNDED CONTEXT: IDENTIDAD ====================
+
+model Usuario {
+  id            String         @id @default(uuid()) @db.Uuid
+  email         String         @unique @db.VarChar(255)
+  passwordHash  String         @map("password_hash") @db.VarChar(255)
+  nombres       String         @db.VarChar(100)
+  apellidos     String         @db.VarChar(100)
+  dni           String         @unique @db.VarChar(8)
+  telefono      String?        @db.VarChar(9)
+  estado        Boolean        @default(true)
+  avatarUrl     String?        @map("avatar_url") @db.Text
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @default(now()) @map("updated_at")
+
+  // Relaciones
+  roles                UsuarioRol[]
+  alumnosVinculados    ApoderadoAlumno[]
+  solicitudesVinculacion SolicitudVinculacion[]
+  solicitudesAdmin     SolicitudVinculacion[] @relation("SolicitudAdmin")
+  tramitesCreados      Tramite[]
+  auditoriaTramites    AuditoriaTramite[]
+  tokensRecuperacion   TokenRecuperacion[]
+  reportesPagos        ReportePago[]
+  pagosValidados       ReportePago[]       @relation("PagoValidadoPor")
+  auditoriaFinanciera  AuditoriaFinanciera[]
+  loginLogs            LoginLog[]
+  refreshTokens        RefreshToken[]
+  perfilAuditoria      PerfilAuditoria[]
+  emailVerifications   EmailVerification[]
+
+  @@map("usuarios")
+}
+
+model LoginLog {
+  id          Int      @id @default(autoincrement())
+  usuarioId   String?  @map("usuario_id") @db.Uuid
+  email       String   @db.VarChar(255)
+  exitoso     Boolean  @default(false)
+  ipAddress   String?  @map("ip_address") @db.VarChar(45)
+  userAgent   String?  @map("user_agent") @db.Text
+  razonFallo  String?  @map("razon_fallo") @db.VarChar(100)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  usuario Usuario? @relation(fields: [usuarioId], references: [id])
+
+  @@index([email])
+  @@index([createdAt(sort: Desc)])
+  @@map("login_logs")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  usuarioId String   @map("usuario_id") @db.Uuid
+  token     String   @unique @db.VarChar(255)
+  expiresAt DateTime @map("expires_at")
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+model PerfilAuditoria {
+  id            Int      @id @default(autoincrement())
+  usuarioId     String   @map("usuario_id") @db.Uuid
+  campo         String   @db.VarChar(50)
+  valorAnterior String?  @map("valor_anterior") @db.Text
+  valorNuevo    String?  @map("valor_nuevo") @db.Text
+  fechaCambio   DateTime @default(now()) @map("fecha_cambio")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@index([usuarioId])
+  @@index([fechaCambio(sort: Desc)])
+  @@map("perfil_auditoria")
+}
+
+model EmailVerification {
+  id         Int      @id @default(autoincrement())
+  usuarioId  String   @map("usuario_id") @db.Uuid
+  codigo     String   @db.VarChar(6)
+  emailNuevo String   @map("email_nuevo") @db.VarChar(255)
+  expiresAt  DateTime @map("expires_at")
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@index([codigo])
+  @@map("email_verifications")
+}
+
+model Rol {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @unique @db.VarChar(50)
+  descripcion String?  @db.Text
+  permisos    Json     @default("[]")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  usuarios UsuarioRol[]
+
+  @@map("roles")
+}
+
+model UsuarioRol {
+  id        Int      @id @default(autoincrement())
+  usuarioId String   @map("usuario_id") @db.Uuid
+  rolId     Int      @map("rol_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  rol     Rol     @relation(fields: [rolId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, rolId])
+  @@map("usuario_roles")
+}
+
+model TokenRecuperacion {
+  id        Int      @id @default(autoincrement())
+  usuarioId String   @map("usuario_id") @db.Uuid
+  token     String   @unique @db.VarChar(255)
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("tokens_recuperacion")
+}
+
+// ==================== BOUNDED CONTEXT: DOCUMENTAL ====================
+
+model Alumno {
+  id          String   @id @default(uuid()) @db.Uuid
+  dni         String   @unique @db.VarChar(8)
+  nombres     String   @db.VarChar(100)
+  apellidos   String   @db.VarChar(100)
+  fechaNac    DateTime? @map("fecha_nac") @db.Date
+  nivel       String   @db.VarChar(20)
+  grado       Int      @db.SmallInt
+  seccion     String   @db.VarChar(5)
+  estado      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+
+  // Relaciones
+  apoderados      ApoderadoAlumno[]
+  solicitudes     SolicitudVinculacion[]
+  tramites        Tramite[]
+  estadoCuenta    EstadoCuenta[]
+  logsNotificacion LogNotificacion[]
+
+  @@index([nivel, grado, seccion])
+  @@map("alumnos")
+}
+
+model ApoderadoAlumno {
+  id          Int      @id @default(autoincrement())
+  apoderadoId String   @map("apoderado_id") @db.Uuid
+  alumnoId    String   @map("alumno_id") @db.Uuid
+  parentesco  String   @db.VarChar(30)
+  esPrincipal Boolean  @default(false) @map("es_principal")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  apoderado Usuario @relation(fields: [apoderadoId], references: [id], onDelete: Cascade)
+  alumno    Alumno  @relation(fields: [alumnoId], references: [id], onDelete: Cascade)
+
+  @@unique([apoderadoId, alumnoId])
+  @@map("apoderado_alumno")
+}
+
+model SolicitudVinculacion {
+  id             Int      @id @default(autoincrement())
+  apoderadoId    String   @map("apoderado_id") @db.Uuid
+  alumnoId       String   @map("alumno_id") @db.Uuid
+  parentesco     String   @db.VarChar(50)
+  parentescoCustom String? @map("parentesco_custom") @db.VarChar(100)
+  estado         String   @default("Pendiente") @db.VarChar(20)
+  motivo         String?  @db.Text
+  adminId        String?  @map("admin_id") @db.Uuid
+  fechaRespuesta DateTime? @map("fecha_respuesta")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  apoderado Usuario  @relation(fields: [apoderadoId], references: [id], onDelete: Cascade)
+  alumno    Alumno   @relation(fields: [alumnoId], references: [id], onDelete: Cascade)
+  admin     Usuario? @relation(fields: [adminId], references: [id])
+
+  @@unique([apoderadoId, alumnoId])
+  @@index([estado])
+  @@index([createdAt(sort: Desc)])
+  @@map("solicitudes_vinculacion")
+}
+
+model TipoTramite {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @db.VarChar(100)
+  descripcion String?  @db.Text
+  requisitos  Json     @default("[]")
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  tramites Tramite[]
+
+  @@map("tipos_tramite")
+}
+
+model Tramite {
+  id               String    @id @default(uuid()) @db.Uuid
+  idSeguimiento    String    @unique @map("id_seguimiento") @db.VarChar(20)
+  apoderadoId      String    @map("apoderado_id") @db.Uuid
+  alumnoId         String    @map("alumno_id") @db.Uuid
+  tipoId           Int       @map("tipo_id")
+  estado           String    @default("Pendiente") @db.VarChar(30)
+  comentario              String?   @db.Text
+  comentarioObservacion   String?   @map("comentario_observacion") @db.Text
+  fechaCreacion           DateTime  @default(now()) @map("fecha_creacion")
+  fechaCulminacion DateTime? @map("fecha_culminacion")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @default(now()) @map("updated_at")
+  updatedBy        String?   @map("updated_by") @db.Uuid
+
+  // Relaciones
+  apoderado        Usuario           @relation(fields: [apoderadoId], references: [id])
+  alumno           Alumno            @relation(fields: [alumnoId], references: [id])
+  tipo             TipoTramite       @relation(fields: [tipoId], references: [id])
+  documentos       DocumentoAdjunto[]
+  auditoria        AuditoriaTramite[]
+
+  @@index([apoderadoId, fechaCreacion(sort: Desc)])
+  @@index([estado])
+  @@map("tramites")
+}
+
+model DocumentoAdjunto {
+  id             Int      @id @default(autoincrement())
+  tramiteId      String   @map("tramite_id") @db.Uuid
+  urlArchivo     String   @map("url_archivo") @db.Text
+  nombreOriginal String   @map("nombre_original") @db.VarChar(255)
+  tipoMime       String   @map("tipo_mime") @db.VarChar(50)
+  pesoBytes      Int      @map("peso_bytes")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  tramite Tramite @relation(fields: [tramiteId], references: [id], onDelete: Cascade)
+
+  @@map("documentos_adjuntos")
+}
+
+model AuditoriaTramite {
+  id             Int      @id @default(autoincrement())
+  tramiteId      String   @map("tramite_id") @db.Uuid
+  usuarioId      String   @map("usuario_id") @db.Uuid
+  fechaHora      DateTime @default(now()) @map("fecha_hora")
+  estadoAnterior String?  @map("estado_anterior") @db.VarChar(30)
+  estadoNuevo    String?  @map("estado_nuevo") @db.VarChar(30)
+  accion         String   @db.VarChar(50)
+  detalles       Json?
+
+  // Relaciones
+  tramite Tramite @relation(fields: [tramiteId], references: [id])
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@index([tramiteId, fechaHora(sort: Desc)])
+  @@map("auditoria_tramites")
+}
+
+// ==================== BOUNDED CONTEXT: TESORERÍA ====================
+
+model ConceptoPago {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @db.VarChar(100)
+  descripcion String?  @db.Text
+  monto       Decimal  @db.Decimal(10, 2)
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  estadoCuenta EstadoCuenta[]
+
+  @@map("conceptos_pago")
+}
+
+model EstadoCuenta {
+  id                String    @id @default(uuid()) @db.Uuid
+  alumnoId          String    @map("alumno_id") @db.Uuid
+  conceptoId        Int       @map("concepto_id")
+  montoTotal        Decimal   @map("monto_total") @db.Decimal(10, 2)
+  montoPagado       Decimal   @default(0) @map("monto_pagado") @db.Decimal(10, 2)
+  fechaVencimiento  DateTime  @map("fecha_vencimiento") @db.Date
+  estado            String    @default("Pendiente") @db.VarChar(20)
+  diasMora          Int       @default(0) @map("dias_mora")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @default(now()) @map("updated_at")
+  updatedBy         String?   @map("updated_by") @db.Uuid
+
+  // Relaciones
+  alumno           Alumno              @relation(fields: [alumnoId], references: [id])
+  concepto         ConceptoPago        @relation(fields: [conceptoId], references: [id])
+  reportesPagos    ReportePago[]
+  auditoria        AuditoriaFinanciera[]
+
+  @@index([alumnoId, estado])
+  @@index([fechaVencimiento, estado])
+  @@map("estado_cuenta")
+}
+
+model ReportePago {
+  id                String    @id @default(uuid()) @db.Uuid
+  estadoCuentaId    String    @map("estado_cuenta_id") @db.Uuid
+  apoderadoId       String    @map("apoderado_id") @db.Uuid
+  numeroOperacion   String    @map("numero_operacion") @db.VarChar(50)
+  fechaPago         DateTime  @map("fecha_pago") @db.Date
+  montoPago         Decimal   @map("monto_pago") @db.Decimal(10, 2)
+  urlVoucher        String    @map("url_voucher") @db.Text
+  estadoValidacion  String    @default("En Validación") @map("estado_validacion") @db.VarChar(20)
+  motivoRechazo     String?   @map("motivo_rechazo") @db.Text
+  validadoPor       String?   @map("validado_por") @db.Uuid
+  fechaValidacion   DateTime? @map("fecha_validacion")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @default(now()) @map("updated_at")
+
+  // Relaciones
+  estadoCuenta   EstadoCuenta @relation(fields: [estadoCuentaId], references: [id])
+  apoderado      Usuario      @relation(fields: [apoderadoId], references: [id])
+  validador      Usuario?     @relation("PagoValidadoPor", fields: [validadoPor], references: [id])
+
+  @@index([estadoValidacion])
+  @@map("reporte_pagos")
+}
+
+model AuditoriaFinanciera {
+  id              Int      @id @default(autoincrement())
+  estadoCuentaId  String   @map("estado_cuenta_id") @db.Uuid
+  usuarioId       String   @map("usuario_id") @db.Uuid
+  fechaHora       DateTime @default(now()) @map("fecha_hora")
+  montoOriginal   Decimal  @map("monto_original") @db.Decimal(10, 2)
+  montoFinal      Decimal  @map("monto_final") @db.Decimal(10, 2)
+  motivoAjuste    String   @map("motivo_ajuste") @db.Text
+
+  // Relaciones
+  estadoCuenta EstadoCuenta @relation(fields: [estadoCuentaId], references: [id])
+  usuario      Usuario      @relation(fields: [usuarioId], references: [id])
+
+  @@map("auditoria_financiera")
+}
+
+// ==================== BOUNDED CONTEXT: NOTIFICACIONES ====================
+
+model ConfiguracionNotificacion {
+  id                     Int      @id @default(autoincrement())
+  tipoAlerta             String   @map("tipo_alerta") @db.VarChar(30)
+  cuerpoMensaje          String   @map("cuerpo_mensaje") @db.Text
+  activo                 Boolean  @default(true)
+  fechaUltimaActualizacion DateTime @default(now()) @map("fecha_ultima_actualizacion")
+
+  @@map("configuracion_notificaciones")
+}
+
+model LogNotificacion {
+  id            Int      @id @default(autoincrement())
+  alumnoId      String   @map("alumno_id") @db.Uuid
+  tipoAlerta    String   @map("tipo_alerta") @db.VarChar(30)
+  canal         String   @db.VarChar(20)
+  estadoEnvio   String   @map("estado_envio") @db.VarChar(20)
+  respuestaApi  Json?    @map("respuesta_api")
+  fechaEnvio    DateTime @default(now()) @map("fecha_envio")
+
+  // Relaciones
+  alumno Alumno @relation(fields: [alumnoId], references: [id])
+
+  @@index([fechaEnvio(sort: Desc)])
+  @@map("logs_notificaciones")
+}
