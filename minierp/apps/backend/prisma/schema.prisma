@@ -200,9 +200,9 @@ model SolicitudVinculacion {
   createdAt      DateTime @default(now()) @map("created_at")
 
   // Relaciones
-  apoderado Usuario  @relation(fields: [apoderadoId], references: [id], onDelete: Cascade)
+  apoderado Usuario  @relation("SolicitudApoderado", fields: [apoderadoId], references: [id], onDelete: Cascade)
   alumno    Alumno   @relation(fields: [alumnoId], references: [id], onDelete: Cascade)
-  admin     Usuario? @relation(fields: [adminId], references: [id])
+  admin     Usuario? @relation("SolicitudAdmin", fields: [adminId], references: [id])
 
   @@unique([apoderadoId, alumnoId])
   @@index([estado])
