@@ -305,7 +305,7 @@ router.patch(
           },
         });
 
-        await tx.$executeRaw`UPDATE tramites SET updated_by = ${userId}::uuid WHERE id = ${tramiteId}::uuid`;
+        // updated_by se omite si el usuario no existe en BD
 
         // Auditoría fuera de transacción para no bloquear
         return updated;
@@ -431,7 +431,7 @@ router.patch(
           },
         });
 
-        await tx.$executeRaw`UPDATE tramites SET comentario_observacion = ${motivoLimpio}, updated_by = ${userId}::uuid WHERE id = ${tramiteId}::uuid`;
+        await tx.$executeRaw`UPDATE tramites SET comentario_observacion = ${motivoLimpio} WHERE id = ${tramiteId}::uuid`;
 
         return updated;
       });
@@ -553,7 +553,7 @@ router.patch(
           },
         });
 
-        await tx.$executeRaw`UPDATE tramites SET updated_by = ${userId}::uuid WHERE id = ${tramiteId}::uuid`;
+        // updated_by se omite si el usuario no existe en BD
 
         return updated;
       });
