@@ -31,15 +31,15 @@ interface TramiteDetalle {
     id: number;
     nombre: string;
     descripcion: string | null;
-    requisitos: unknown;
+    requisitos?: unknown;
   };
   documentos: {
     id: number;
-    urlArchivo: string;
+    urlArchivo?: string;
     nombreOriginal: string;
     tipoMime: string;
     pesoBytes: number;
-    createdAt: string;
+    createdAt?: string;
   }[];
   auditoria?: {
     id: number;
@@ -56,7 +56,7 @@ interface TramiteDetalle {
 }
 
 interface DetalleTramiteModalProps {
-  tramite: TramiteDetalle | null;
+  tramite: TramiteDetalle | Record<string, unknown> | null;
   isOpen: boolean;
   onClose: () => void;
   onDerivar?: (tramiteId: string) => void;
