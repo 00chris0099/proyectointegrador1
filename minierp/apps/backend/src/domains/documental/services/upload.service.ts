@@ -44,7 +44,7 @@ export async function uploadToImgBB(
   formData.append('image', base64Data);
   formData.append('name', filename.replace(/\.[^/.]+$/, ''));
 
-  const response = await axios.post('https://api.imgbb.com/1/upload', formData.toString(), {
+  const response = await axios.post<{ data: { url: string; delete_url: string } }>('https://api.imgbb.com/1/upload', formData.toString(), {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     timeout: 30000,
   });
