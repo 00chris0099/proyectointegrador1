@@ -15,7 +15,7 @@ interface TramiteDetalle {
     apellidos: string;
     email: string;
     dni: string;
-    telefono: string | null;
+    telefono?: string | null;
   };
   alumno: {
     id: string;
