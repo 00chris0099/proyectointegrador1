@@ -529,11 +529,11 @@ export default function AuditoriaPage() {
                   </div>
                 )}
 
-                {selectedRegistro.detalles && typeof selectedRegistro.detalles === 'object' && (
+                {selectedRegistro.detalles !== null && selectedRegistro.detalles !== undefined && typeof selectedRegistro.detalles === 'object' && (
                   <div className="bg-purple-50 rounded-lg p-3">
                     <h4 className="text-xs font-semibold text-purple-900 mb-2">Detalles</h4>
                     <div className="space-y-1">
-                      {Object.entries(selectedRegistro.detalles as Record<string, unknown>).map(([key, value]) => (
+                      {Object.entries(selectedRegistro.detalles as Record<string, string | number | boolean | null>).map(([key, value]) => (
                         <div key={key} className="flex gap-2 text-xs">
                           <span className="font-medium text-purple-700 capitalize">
                             {key.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ')}:
