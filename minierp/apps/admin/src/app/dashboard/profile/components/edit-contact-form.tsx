@@ -1,5 +1,6 @@
-import { authFetch } from '@/lib/api';
 'use client';
+
+import { authFetch } from '@/lib/api';;
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';

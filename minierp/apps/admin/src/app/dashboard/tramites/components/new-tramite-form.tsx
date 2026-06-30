@@ -1,5 +1,6 @@
-import { authFetch } from '@/lib/api';
 'use client';
+
+import { authFetch } from '@/lib/api';;
 
 import { useState, useEffect } from 'react';
 import { Loader2, Upload, X, FileText, CheckCircle } from 'lucide-react';

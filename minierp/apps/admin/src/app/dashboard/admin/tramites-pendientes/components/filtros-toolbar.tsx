@@ -1,5 +1,6 @@
-import { authFetch } from '@/lib/api';
 'use client';
+
+import { authFetch } from '@/lib/api';;
 
 import { useState, useEffect, useCallback } from 'react';
 import { Loader2, Search, X, Calendar, FileText } from 'lucide-react';
