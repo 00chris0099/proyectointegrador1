@@ -265,6 +265,12 @@ router.patch(
       const tramiteId = req.params.id;
       const userId = (req as any).user.sub;
 
+      // Validar que el usuario existe
+      const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
+      if (!userExists) {
+        return res.status(401).json({ success: false, message: 'Usuario no encontrado. Inicia sesión nuevamente.' });
+      }
+
       const tramite = await prisma.tramite.findUnique({
         where: { id: tramiteId },
         select: {
@@ -371,6 +377,11 @@ router.patch(
     try {
       const tramiteId = req.params.id;
       const userId = (req as any).user.sub;
+
+      const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
+      if (!userExists) {
+        return res.status(401).json({ success: false, message: 'Usuario no encontrado. Inicia sesión nuevamente.' });
+      }
       const { motivo } = req.body;
 
       if (!motivo || typeof motivo !== 'string' || motivo.trim().length < 10) {
@@ -487,6 +498,12 @@ router.patch(
     try {
       const tramiteId = req.params.id;
       const userId = (req as any).user.sub;
+
+      const userExists = await prisma.usuario.findUnique({ where: { id: userId } });
+      if (!userExists) {
+        return res.status(401).json({ success: false, message: 'Usuario no encontrado. Inicia sesión nuevamente.' });
+      }
+
       const { comentario } = req.body;
 
       const tramite = await prisma.tramite.findUnique({
