@@ -39,7 +39,7 @@ class SSEService {
 
       final uri = Uri.parse('${ApiConfig.baseUrl}/api/tramites/stream');
       final request = await HttpClient().getUrl(uri);
-      request.headers.set('Cookie', 'accessToken=$token');
+      request.headers.set('Authorization', 'Bearer $token');
       request.headers.set('Accept', 'text/event-stream');
       request.headers.set('Cache-Control', 'no-cache');
 

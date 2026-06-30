@@ -143,7 +143,7 @@ class TramiteService {
 
   Map<String, String> get _headers => {
     'Content-Type': 'application/json',
-    if (_accessToken != null) 'Cookie': 'accessToken=$_accessToken',
+    if (_accessToken != null) 'Authorization': 'Bearer $_accessToken',
   };
 
   Future<List<TipoTramite>> getTipos() async {

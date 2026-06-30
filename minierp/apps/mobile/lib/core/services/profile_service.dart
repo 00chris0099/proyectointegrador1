@@ -38,7 +38,7 @@ class ProfileService extends ChangeNotifier {
         Uri.parse('${ApiConfig.baseUrl}/api/users/profile'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
       );
 
@@ -85,7 +85,7 @@ class ProfileService extends ChangeNotifier {
         Uri.parse('${ApiConfig.baseUrl}/api/users/profile'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode(body),
       );
@@ -128,7 +128,7 @@ class ProfileService extends ChangeNotifier {
         Uri.parse('${ApiConfig.baseUrl}/api/users/profile/verify-email'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode({'email': email}),
       );
@@ -171,7 +171,7 @@ class ProfileService extends ChangeNotifier {
         Uri.parse('${ApiConfig.baseUrl}/api/users/profile/confirm-email'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode({'codigo': codigo}),
       );
@@ -217,7 +217,7 @@ class ProfileService extends ChangeNotifier {
         Uri.parse('${ApiConfig.baseUrl}/api/users/profile/password'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode({
           'currentPassword': currentPassword,
@@ -263,7 +263,7 @@ class ProfileService extends ChangeNotifier {
         Uri.parse('${ApiConfig.baseUrl}/api/users/profile/avatar'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode({'imageUrl': imageUrl}),
       );

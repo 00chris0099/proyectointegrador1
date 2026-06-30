@@ -38,7 +38,7 @@ class StudentService extends ChangeNotifier {
         Uri.parse('${ApiConfig.baseUrl}/api/apoderados/me/alumnos'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
       );
 
@@ -93,7 +93,7 @@ class StudentService extends ChangeNotifier {
         Uri.parse('${ApiConfig.baseUrl}/api/apoderados/me/solicitud'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode(body),
       );
@@ -138,7 +138,7 @@ class StudentService extends ChangeNotifier {
         ),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': 'accessToken=$token',
+          'Authorization': 'Bearer $token',
         },
       );
 
