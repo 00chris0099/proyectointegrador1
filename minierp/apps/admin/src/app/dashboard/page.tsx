@@ -3,7 +3,8 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { Loader2, LogOut, User } from 'lucide-react';
+import { Loader2, LogOut, User, FileText, CreditCard, Settings } from 'lucide-react';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -29,7 +30,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
@@ -54,27 +54,29 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Bienvenido al Panel</h2>
           <p className="text-gray-600">
             Has iniciado sesión correctamente. Selecciona un módulo del menú para comenzar.
           </p>
-          
+
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors cursor-pointer">
+            <Link href="/dashboard/tramites" className="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
+              <FileText size={24} className="text-blue-600 mb-2" />
               <h3 className="font-medium text-gray-900">Documental</h3>
               <p className="text-sm text-gray-500 mt-1">Gestionar trámites</p>
-            </div>
-            <div className="p-4 border border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors cursor-pointer">
+            </Link>
+            <Link href="/dashboard/tesoreria" className="block p-4 border border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors">
+              <CreditCard size={24} className="text-green-600 mb-2" />
               <h3 className="font-medium text-gray-900">Tesorería</h3>
               <p className="text-sm text-gray-500 mt-1">Gestionar pagos</p>
-            </div>
-            <div className="p-4 border border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors cursor-pointer">
+            </Link>
+            <Link href="/dashboard/admin/solicitudes-vinculacion" className="block p-4 border border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors">
+              <Settings size={24} className="text-purple-600 mb-2" />
               <h3 className="font-medium text-gray-900">Administración</h3>
               <p className="text-sm text-gray-500 mt-1">Configurar el sistema</p>
-            </div>
+            </Link>
           </div>
         </div>
       </main>

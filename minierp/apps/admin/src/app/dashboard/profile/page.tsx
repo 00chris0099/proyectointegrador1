@@ -1,10 +1,10 @@
 'use client';
 
-import { authFetch } from '@/lib/api';;
+import { authFetch } from '@/lib/api';
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import { Loader2, User, Mail, Phone, Shield, IdCard } from 'lucide-react';
+import { Loader2, User, Mail, Phone, Shield, CreditCard } from 'lucide-react';
 import AvatarUpload from './components/avatar-upload';
 import EditContactForm from './components/edit-contact-form';
 import ChangePasswordForm from './components/change-password-form';
@@ -85,7 +85,7 @@ export default function ProfilePage() {
               {profile.nombres} {profile.apellidos}
             </h2>
             <div className="flex items-center gap-2 justify-center sm:justify-start mt-1 text-gray-500 text-sm">
-              <IdCard size={14} />
+              <CreditCard size={14} />
               DNI: {profile.dni}
             </div>
             <div className="flex flex-wrap gap-2 mt-2 justify-center sm:justify-start">
