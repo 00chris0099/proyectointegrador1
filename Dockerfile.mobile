@@ -1,11 +1,9 @@
-# Mobile build - 2026-06-30 v2
+# Mobile build - 2026-06-30 v3
 FROM ghcr.io/cirruslabs/flutter:stable AS builder
 WORKDIR /app
 COPY minierp/apps/mobile/pubspec.* ./
 RUN flutter pub get
 COPY minierp/apps/mobile/ .
-RUN flutter create --platforms web . || true
-RUN flutter pub get
 RUN flutter build web --release
 
 FROM nginx:alpine AS runner
@@ -16,16 +14,13 @@ server {
     server_name localhost;
     root /usr/share/nginx/html;
     index index.html;
-
     location / {
         try_files $uri $uri/ /index.html;
     }
-
     location /assets/ {
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
-
     gzip on;
     gzip_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript image/svg+xml;
     gzip_min_length 256;
