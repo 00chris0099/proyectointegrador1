@@ -27,7 +27,10 @@ const PORT = config.PORT;
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: config.ALLOWED_ORIGINS,
+  origin: [
+    'https://aimachristian-adminintegrador.ajcxjb.easypanel.host',
+    'http://localhost:3002'
+  ],
   credentials: true
 }));
 app.use(express.json());
