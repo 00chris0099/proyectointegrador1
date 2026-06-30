@@ -25,7 +25,7 @@ model Usuario {
   // Relaciones
   roles                UsuarioRol[]
   alumnosVinculados    ApoderadoAlumno[]
-  solicitudesVinculacion SolicitudVinculacion[]
+  solicitudesVinculacion SolicitudVinculacion[] @relation("SolicitudApoderado")
   solicitudesAdmin     SolicitudVinculacion[] @relation("SolicitudAdmin")
   tramitesCreados      Tramite[]
   auditoriaTramites    AuditoriaTramite[]
