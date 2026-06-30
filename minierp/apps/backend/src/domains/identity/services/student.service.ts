@@ -105,6 +105,45 @@ export class StudentService {
 
     return count;
   }
+
+  async createStudent(data: {
+    dni: string;
+    nombres: string;
+    apellidos: string;
+    nivel: string;
+    grado: number;
+    seccion: string;
+    fechaNac?: string;
+  }) {
+    const existing = await prisma.alumno.findUnique({ where: { dni: data.dni } });
+    if (existing) {
+      throw new Error('Ya existe un alumno con ese DNI');
+    }
+
+    return prisma.alumno.create({
+      data: {
+        dni: data.dni,
+        nombres: data.nombres,
+        apellidos: data.apellidos,
+        nivel: data.nivel,
+        grado: data.grado,
+        seccion: data.seccion,
+        fechaNac: data.fechaNac ? new Date(data.fechaNac) : null,
+        estado: true,
+      },
+    });
+  }
+
+  async getAllStudents() {
+    return prisma.alumno.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async deleteStudent(studentId: string) {
+    await prisma.apoderadoAlumno.deleteMany({ where: { alumnoId: studentId } });
+    return prisma.alumno.delete({ where: { id: studentId } });
+  }
 }
 
 export const studentService = new StudentService();

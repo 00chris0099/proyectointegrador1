@@ -174,4 +174,60 @@ router.patch(
   }
 );
 
+// ==================== ADMIN: GESTIÓN DE ALUMNOS ====================
+
+// GET /api/admin/alumnos - Listar todos los alumnos
+router.get(
+  '/admin/alumnos',
+  authMiddleware,
+  rbacMiddleware(['Secretaria', 'Administrador']),
+  async (req: Request, res: Response) => {
+    try {
+      const alumnos = await studentService.getAllStudents();
+      res.json({ success: true, data: alumnos });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
+
+// POST /api/admin/alumnos - Crear alumno
+router.post(
+  '/admin/alumnos',
+  authMiddleware,
+  rbacMiddleware(['Secretaria', 'Administrador']),
+  async (req: Request, res: Response) => {
+    try {
+      const { dni, nombres, apellidos, nivel, grado, seccion, fechaNac } = req.body;
+
+      if (!dni || !nombres || !apellidos || !nivel || !grado || !seccion) {
+        return res.status(400).json({ success: false, message: 'Todos los campos son obligatorios' });
+      }
+
+      const alumno = await studentService.createStudent({
+        dni, nombres, apellidos, nivel, grado: parseInt(grado), seccion, fechaNac
+      });
+
+      res.status(201).json({ success: true, data: alumno });
+    } catch (error: any) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+);
+
+// DELETE /api/admin/alumnos/:id - Eliminar alumno
+router.delete(
+  '/admin/alumnos/:id',
+  authMiddleware,
+  rbacMiddleware(['Administrador']),
+  async (req: Request, res: Response) => {
+    try {
+      await studentService.deleteStudent(req.params.id);
+      res.json({ success: true, message: 'Alumno eliminado' });
+    } catch (error: any) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+);
+
 export default router;

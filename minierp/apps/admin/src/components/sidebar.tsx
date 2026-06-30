@@ -49,6 +49,12 @@ const menuItems: MenuItem[] = [
     roles: ['Tesoreria', 'Administrador'],
   },
   {
+    label: 'Gestionar Alumnos',
+    href: '/dashboard/admin/alumnos',
+    icon: Users,
+    roles: ['Secretaria', 'Administrador'],
+  },
+  {
     label: 'Solicitudes Vinculación',
     href: '/dashboard/admin/solicitudes-vinculacion',
     icon: LinkIcon,
