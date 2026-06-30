@@ -3,7 +3,7 @@ WORKDIR /app
 COPY minierp/apps/mobile/pubspec.* ./
 RUN flutter pub get
 COPY minierp/apps/mobile/ .
-RUN flutter build web --release --web-renderer canvaskit
+RUN flutter build web --release
 
 FROM nginx:alpine AS runner
 COPY --from=builder /app/build/web /usr/share/nginx/html
