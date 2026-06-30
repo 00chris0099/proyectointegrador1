@@ -8,7 +8,7 @@ interface TramiteDetalle {
   estado: string;
   comentario: string | null;
   fechaCreacion: string;
-  fechaCulminacion: string | null;
+  fechaCulminacion?: string | null;
   apoderado: {
     id: string;
     nombres: string;
@@ -41,7 +41,7 @@ interface TramiteDetalle {
     pesoBytes: number;
     createdAt: string;
   }[];
-  auditoria: {
+  auditoria?: {
     id: number;
     fechaHora: string;
     estadoAnterior: string | null;
