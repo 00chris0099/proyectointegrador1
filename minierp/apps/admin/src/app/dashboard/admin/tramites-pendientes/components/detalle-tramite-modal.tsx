@@ -198,7 +198,7 @@ export default function DetalleTramiteModal({ tramite, isOpen, onClose, onDeriva
               </div>
             )}
 
-            {tramite.auditoria.length > 0 && (
+            {tramite.auditoria && tramite.auditoria.length > 0 && (
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <History size={16} />
