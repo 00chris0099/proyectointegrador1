@@ -1,5 +1,5 @@
 class ApiConfig {
-  static const String baseUrl = 'http://localhost:3001';
+  static const String baseUrl = 'https://aimachristian-backendintegrador.ajcxjb.easypanel.host';
   static const String appName = 'Mini-ERP La Asunción';
 
   // Endpoints
