@@ -185,15 +185,19 @@ export default function DetalleTramiteModal({ tramite, isOpen, onClose, onDeriva
                           <p className="text-xs text-gray-500">{formatTamano(doc.pesoBytes)}</p>
                         </div>
                       </div>
-                      <a
-                        href={doc.urlArchivo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      >
-                        <Download size={14} />
-                        Descargar
-                      </a>
+                      {doc.urlArchivo ? (
+                        <a
+                          href={doc.urlArchivo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        >
+                          <Download size={14} />
+                          Descargar
+                        </a>
+                      ) : (
+                        <span className="text-xs text-gray-400">Sin archivo</span>
+                      )}
                     </div>
                   ))}
                 </div>
