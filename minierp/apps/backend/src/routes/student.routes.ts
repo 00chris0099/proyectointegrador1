@@ -94,7 +94,7 @@ router.delete('/solicitudes/:id', authMiddleware, async (req: Request, res: Resp
 router.get(
   '/admin/solicitudes-vinculacion',
   authMiddleware,
-  rbacMiddleware(['SUPER_ADMIN', 'ADMIN']),
+  rbacMiddleware(['Secretaria', 'Administrador']),
   async (req: Request, res: Response) => {
     try {
       const { estado } = req.query;
@@ -117,7 +117,7 @@ router.get(
 router.patch(
   '/admin/solicitudes-vinculacion/:id/aprobar',
   authMiddleware,
-  rbacMiddleware(['SUPER_ADMIN', 'ADMIN']),
+  rbacMiddleware(['Secretaria', 'Administrador']),
   async (req: Request, res: Response) => {
     try {
       const adminId = (req as any).user.sub;
@@ -140,7 +140,7 @@ router.patch(
 router.patch(
   '/admin/solicitudes-vinculacion/:id/rechazar',
   authMiddleware,
-  rbacMiddleware(['SUPER_ADMIN', 'ADMIN']),
+  rbacMiddleware(['Secretaria', 'Administrador']),
   async (req: Request, res: Response) => {
     try {
       const adminId = (req as any).user.sub;
