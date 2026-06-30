@@ -381,8 +381,9 @@ class _TramiteDetailScreenState extends State<TramiteDetailScreen> {
                                           Icons.open_in_new,
                                           size: 20,
                                         ),
-                                        onPressed: () =>
-                                            _openDocument(doc.urlArchivo),
+                                        onPressed: doc.urlArchivo != null
+                                            ? () => _openDocument(doc.urlArchivo!)
+                                            : null,
                                         color: Colors.blue,
                                       ),
                                     ],
