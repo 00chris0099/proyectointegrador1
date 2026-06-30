@@ -67,7 +67,7 @@ function ResetPasswordForm() {
 
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/validate-token`,
+          `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/auth/validate-token`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -93,7 +93,7 @@ function ResetPasswordForm() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/reset-password`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/auth/reset-password`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

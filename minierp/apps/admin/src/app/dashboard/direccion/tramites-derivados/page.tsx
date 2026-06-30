@@ -95,7 +95,7 @@ export default function TramitesDerivadosPage() {
       params.append('limit', '20');
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/direccion/tramites/derivados?${params.toString()}`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/direccion/tramites/derivados?${params.toString()}`,
         { credentials: 'include' }
       );
       const data = await res.json();
@@ -116,7 +116,7 @@ export default function TramitesDerivadosPage() {
   const fetchEstadisticas = useCallback(async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/direccion/tramites/estadisticas`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/direccion/tramites/estadisticas`,
         { credentials: 'include' }
       );
       const data = await res.json();
@@ -154,7 +154,7 @@ export default function TramitesDerivadosPage() {
   const handleViewDetail = async (tramite: TramiteDerivado) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/direccion/tramites/${tramite.id}/detalle`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/direccion/tramites/${tramite.id}/detalle`,
         { credentials: 'include' }
       );
       const data = await res.json();
@@ -187,7 +187,7 @@ export default function TramitesDerivadosPage() {
     setAprobandoLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tramites/${aprobandoTramiteId}/aprobar`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${aprobandoTramiteId}/aprobar`,
         {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
@@ -228,7 +228,7 @@ export default function TramitesDerivadosPage() {
   const handleDescargarConstancia = async (tramiteId: string) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/direccion/tramites/${tramiteId}/constancia`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/direccion/tramites/${tramiteId}/constancia`,
         { credentials: 'include' }
       );
 

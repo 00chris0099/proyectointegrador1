@@ -32,7 +32,7 @@ export default function ForgotPasswordPage() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/recover`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/auth/recover`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

@@ -63,7 +63,7 @@ export function useTramiteSSE(
       eventSourceRef.current.close();
     }
 
-    const api_url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const api_url = 'https://aimachristian-backendintegrador.ajcxjb.easypanel.host';
     const eventSource = new EventSource(`${api_url}/api/tramites/stream`, {
       withCredentials: true,
     });

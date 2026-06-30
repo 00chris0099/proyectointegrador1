@@ -81,7 +81,7 @@ export default function LinkingRequestForm({ onSubmitted }: LinkingRequestFormPr
         payload.parentescoCustom = data.parentescoCustom;
       }
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/apoderados/me/solicitud`, {
+      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/apoderados/me/solicitud`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

@@ -58,7 +58,7 @@ export default function EditContactForm({
       }
       if (data.email !== currentEmail) {
         const verifyRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/users/profile/verify-email`,
+          `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile/verify-email`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -81,7 +81,7 @@ export default function EditContactForm({
       }
 
       if (Object.keys(payload).length > 0) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/profile`, {
+        const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -108,7 +108,7 @@ export default function EditContactForm({
   const handleVerifyCode = async () => {
     setIsSubmitting(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/profile/confirm-email`, {
+      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile/confirm-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

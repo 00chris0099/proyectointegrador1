@@ -108,7 +108,7 @@ export default function TramitesPendientesPage() {
       if (filters.search) params.append('search', filters.search);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/tramites/pendientes?${params.toString()}`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/tramites/pendientes?${params.toString()}`,
         { credentials: 'include' }
       );
       const data = await res.json();
@@ -129,7 +129,7 @@ export default function TramitesPendientesPage() {
   const fetchEstadisticas = useCallback(async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/tramites/estadisticas`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/tramites/estadisticas`,
         { credentials: 'include' }
       );
       const data = await res.json();
@@ -175,7 +175,7 @@ export default function TramitesPendientesPage() {
   const handleViewDetail = async (tramite: TramitePendiente) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/tramites/${tramite.id}/detalle`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/tramites/${tramite.id}/detalle`,
         { credentials: 'include' }
       );
       const data = await res.json();
@@ -208,7 +208,7 @@ export default function TramitesPendientesPage() {
     setDerivandoLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tramites/${derivandoTramiteId}/derivar`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${derivandoTramiteId}/derivar`,
         {
           method: 'PATCH',
           credentials: 'include',
@@ -258,7 +258,7 @@ export default function TramitesPendientesPage() {
     setObservandoLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tramites/${observandoTramiteId}/observar`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${observandoTramiteId}/observar`,
         {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },

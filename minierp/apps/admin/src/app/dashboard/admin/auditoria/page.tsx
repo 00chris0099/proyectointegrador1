@@ -106,7 +106,7 @@ export default function AuditoriaPage() {
       if (fechaFin) params.append('fecha_fin', fechaFin);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/auditoria?${params.toString()}`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/auditoria?${params.toString()}`,
         { credentials: 'include' }
       );
       const data = await res.json();
@@ -127,7 +127,7 @@ export default function AuditoriaPage() {
   const fetchEstadisticas = useCallback(async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/auditoria/estadisticas`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/auditoria/estadisticas`,
         { credentials: 'include' }
       );
       const data = await res.json();
@@ -142,7 +142,7 @@ export default function AuditoriaPage() {
   const fetchAcciones = useCallback(async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/auditoria/acciones`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/auditoria/acciones`,
         { credentials: 'include' }
       );
       const data = await res.json();

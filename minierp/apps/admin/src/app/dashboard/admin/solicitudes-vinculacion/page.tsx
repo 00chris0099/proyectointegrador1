@@ -50,8 +50,8 @@ export default function SolicitudesVinculacionPage() {
   const fetchSolicitudes = useCallback(async () => {
     try {
       const url = filter === 'Pendiente'
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/admin/solicitudes-vinculacion?estado=Pendiente`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/admin/solicitudes-vinculacion`;
+        ? `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/solicitudes-vinculacion?estado=Pendiente`
+        : `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/solicitudes-vinculacion`;
       
       const res = await fetch(url, { credentials: 'include' });
       const data = await res.json();
@@ -97,7 +97,7 @@ export default function SolicitudesVinculacionPage() {
     setProcessingId(id);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/solicitudes-vinculacion/${id}/aprobar`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/solicitudes-vinculacion/${id}/aprobar`,
         {
           method: 'PATCH',
           credentials: 'include',
@@ -128,7 +128,7 @@ export default function SolicitudesVinculacionPage() {
     setProcessingId(selectedSolicitud.id);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/solicitudes-vinculacion/${selectedSolicitud.id}/rechazar`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/admin/solicitudes-vinculacion/${selectedSolicitud.id}/rechazar`,
         {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },

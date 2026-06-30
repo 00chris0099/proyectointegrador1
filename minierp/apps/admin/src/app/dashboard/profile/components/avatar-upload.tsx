@@ -38,7 +38,7 @@ export default function AvatarUpload({ currentAvatar, onAvatarUpdated }: AvatarU
       formData.append('file', file);
 
       const uploadRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/upload`,
         { method: 'POST', credentials: 'include', body: formData }
       );
 
@@ -47,7 +47,7 @@ export default function AvatarUpload({ currentAvatar, onAvatarUpdated }: AvatarU
       if (uploadRes.ok && uploadData.success) {
         const imageUrl = uploadData.data.url;
 
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/profile/avatar`, {
+        await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/users/profile/avatar`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -61,7 +61,7 @@ export default function TramiteDetailPage() {
   const fetchTramite = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tramites/${tramiteId}`,
+        `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${tramiteId}`,
         { credentials: 'include' }
       );
       const data = await res.json();

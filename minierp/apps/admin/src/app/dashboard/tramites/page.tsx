@@ -49,7 +49,7 @@ export default function TramitesPage() {
 
   const fetchTramites = useCallback(async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tramites/me`, {
+      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/me`, {
         credentials: 'include',
       });
       const data = await res.json();

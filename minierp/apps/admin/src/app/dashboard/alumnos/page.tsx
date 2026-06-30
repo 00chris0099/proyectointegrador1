@@ -29,7 +29,7 @@ export default function StudentsPage() {
 
   const fetchStudents = useCallback(async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/apoderados/me/alumnos`, {
+      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/apoderados/me/alumnos`, {
         credentials: 'include',
       });
       const data = await res.json();

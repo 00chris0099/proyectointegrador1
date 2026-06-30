@@ -27,7 +27,7 @@ export default function FiltrosToolbar({ onFilterChange }: FiltrosToolbarProps) 
   useEffect(() => {
     const fetchTipos = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tramites/tipos`, {
+        const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/tipos`, {
           credentials: 'include',
         });
         const data = await res.json();

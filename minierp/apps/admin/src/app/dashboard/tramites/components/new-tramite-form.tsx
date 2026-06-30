@@ -42,8 +42,8 @@ export default function NewTramiteForm({ onSubmitted, onCancel }: NewTramiteForm
     const fetchData = async () => {
       try {
         const [tiposRes, alumnosRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tramites/tipos`, { credentials: 'include' }),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/apoderados/me/alumnos`, { credentials: 'include' }),
+          fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/tipos`, { credentials: 'include' }),
+          fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/apoderados/me/alumnos`, { credentials: 'include' }),
         ]);
 
         const tiposData = await tiposRes.json();
@@ -105,7 +105,7 @@ export default function NewTramiteForm({ onSubmitted, onCancel }: NewTramiteForm
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tramites`, {
+      const res = await fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -126,7 +126,7 @@ export default function NewTramiteForm({ onSubmitted, onCancel }: NewTramiteForm
           formData.append('file', file);
 
           const uploadRes = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/tramites/${tramiteId}/documentos`,
+            `${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/${tramiteId}/documentos`,
             {
               method: 'POST',
               credentials: 'include',
