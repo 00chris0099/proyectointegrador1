@@ -29,7 +29,9 @@ app.use(helmet());
 app.use(cors({
   origin: [
     'https://aimachristian-adminintegrador.ajcxjb.easypanel.host',
-    'http://localhost:3002'
+    'https://aimachristian-mobileintegrador.ajcxjb.easypanel.host',
+    'http://localhost:3002',
+    'http://localhost:80'
   ],
   credentials: true
 }));
