@@ -1,7 +1,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY minierp/apps/admin/package*.json ./
-RUN npm ci
+RUN npm install
 COPY minierp/apps/admin/ .
 RUN npm run build
 
