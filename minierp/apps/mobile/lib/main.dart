@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-            seedMaterial: Colors.blue,
+            seedColor: Colors.blue,
             brightness: Brightness.light,
           ),
           useMaterial3: true,

@@ -64,12 +64,14 @@ class AlumnoInfo {
 
 class DocumentoInfo {
   final int id;
+  final String? urlArchivo;
   final String nombreOriginal;
   final String tipoMime;
   final int pesoBytes;
 
   DocumentoInfo({
     required this.id,
+    this.urlArchivo,
     required this.nombreOriginal,
     required this.tipoMime,
     required this.pesoBytes,
@@ -78,6 +80,7 @@ class DocumentoInfo {
   factory DocumentoInfo.fromJson(Map<String, dynamic> json) {
     return DocumentoInfo(
       id: json['id'],
+      urlArchivo: json['urlArchivo'],
       nombreOriginal: json['nombreOriginal'],
       tipoMime: json['tipoMime'],
       pesoBytes: json['pesoBytes'],
