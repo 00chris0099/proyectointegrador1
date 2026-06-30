@@ -19,7 +19,7 @@ export class TokenService {
     };
 
     return jwt.sign(payload, config.JWT_SECRET, {
-      expiresIn: '12h',
+      expiresIn: '365d',
       issuer: 'minierp',
       jwtid: uuidv4()
     });
