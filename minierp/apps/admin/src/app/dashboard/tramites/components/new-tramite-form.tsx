@@ -1,6 +1,6 @@
 'use client';
 
-import { authFetch } from '@/lib/api';;
+import { authFetch } from '@/lib/api';
 
 import { useState, useEffect } from 'react';
 import { Loader2, Upload, X, FileText, CheckCircle } from 'lucide-react';
@@ -44,8 +44,8 @@ export default function NewTramiteForm({ onSubmitted, onCancel }: NewTramiteForm
     const fetchData = async () => {
       try {
         const [tiposRes, alumnosRes] = await Promise.all([
-          fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/tramites/tipos`, { credentials: 'include' }),
-          fetch(`${'https://aimachristian-backendintegrador.ajcxjb.easypanel.host'}/api/apoderados/me/alumnos`, { credentials: 'include' }),
+          authFetch('/api/tramites/tipos'),
+          authFetch('/api/apoderados/me/alumnos'),
         ]);
 
         const tiposData = await tiposRes.json();

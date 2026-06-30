@@ -3,12 +3,89 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { Loader2, LogOut, User, FileText, CreditCard, Settings } from 'lucide-react';
+import { Loader2, LogOut, User, FileText, CreditCard, Settings, Users, ClipboardList, CheckCircle, History, LinkIcon } from 'lucide-react';
 import Link from 'next/link';
+
+interface DashboardCard {
+  title: string;
+  description: string;
+  href: string;
+  icon: any;
+  color: string;
+  bgColor: string;
+  roles: string[];
+}
+
+const cards: DashboardCard[] = [
+  {
+    title: 'Mis Alumnos',
+    description: 'Ver alumnos vinculados',
+    href: '/dashboard/alumnos',
+    icon: Users,
+    color: 'text-blue-600',
+    bgColor: 'hover:border-blue-500 hover:bg-blue-50',
+    roles: ['Apoderado'],
+  },
+  {
+    title: 'Mis Trámites',
+    description: 'Crear y consultar trámites',
+    href: '/dashboard/tramites',
+    icon: FileText,
+    color: 'text-indigo-600',
+    bgColor: 'hover:border-indigo-500 hover:bg-indigo-50',
+    roles: ['Apoderado'],
+  },
+  {
+    title: 'Trámites Pendientes',
+    description: 'Revisar y derivar solicitudes',
+    href: '/dashboard/admin/tramites-pendientes',
+    icon: ClipboardList,
+    color: 'text-orange-600',
+    bgColor: 'hover:border-orange-500 hover:bg-orange-50',
+    roles: ['Secretaria', 'Administrador'],
+  },
+  {
+    title: 'Solicitudes Vinculación',
+    description: 'Aprobar o rechazar vínculos',
+    href: '/dashboard/admin/solicitudes-vinculacion',
+    icon: LinkIcon,
+    color: 'text-teal-600',
+    bgColor: 'hover:border-teal-500 hover:bg-teal-50',
+    roles: ['Secretaria', 'Administrador'],
+  },
+  {
+    title: 'Trámites Derivados',
+    description: 'Aprobar documentos finales',
+    href: '/dashboard/direccion/tramites-derivados',
+    icon: CheckCircle,
+    color: 'text-green-600',
+    bgColor: 'hover:border-green-500 hover:bg-green-50',
+    roles: ['Direccion', 'Administrador'],
+  },
+  {
+    title: 'Auditoría Documental',
+    description: 'Historial de cambios',
+    href: '/dashboard/admin/auditoria',
+    icon: History,
+    color: 'text-purple-600',
+    bgColor: 'hover:border-purple-500 hover:bg-purple-50',
+    roles: ['Direccion', 'Administrador'],
+  },
+  {
+    title: 'Tesorería',
+    description: 'Gestionar pagos y deudas',
+    href: '/dashboard/tesoreria',
+    icon: CreditCard,
+    color: 'text-emerald-600',
+    bgColor: 'hover:border-emerald-500 hover:bg-emerald-50',
+    roles: ['Tesoreria', 'Administrador'],
+  },
+];
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const userRoles = (session?.user as any)?.roles || [];
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -24,9 +101,11 @@ export default function DashboardPage() {
     );
   }
 
-  if (!session) {
-    return null;
-  }
+  if (!session) return null;
+
+  const visibleCards = cards.filter(card =>
+    card.roles.some(role => userRoles.includes(role))
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -35,7 +114,7 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Mini-ERP La Asunción</h1>
-              <p className="text-sm text-gray-500">Panel Administrativo</p>
+              <p className="text-sm text-gray-500">Panel Administrativo — {userRoles[0] || 'Usuario'}</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-gray-700">
@@ -55,29 +134,19 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Bienvenido al Panel</h2>
-          <p className="text-gray-600">
-            Has iniciado sesión correctamente. Selecciona un módulo del menú para comenzar.
-          </p>
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Bienvenido, {session.user?.name}</h2>
+          <p className="text-gray-600">Selecciona un módulo del menú para comenzar.</p>
+        </div>
 
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Link href="/dashboard/tramites" className="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
-              <FileText size={24} className="text-blue-600 mb-2" />
-              <h3 className="font-medium text-gray-900">Documental</h3>
-              <p className="text-sm text-gray-500 mt-1">Gestionar trámites</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {visibleCards.map(card => (
+            <Link key={card.href} href={card.href} className={`block p-5 border border-gray-200 rounded-xl transition-colors ${card.bgColor}`}>
+              <card.icon size={28} className={`${card.color} mb-3`} />
+              <h3 className="font-semibold text-gray-900">{card.title}</h3>
+              <p className="text-sm text-gray-500 mt-1">{card.description}</p>
             </Link>
-            <Link href="/dashboard/tesoreria" className="block p-4 border border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors">
-              <CreditCard size={24} className="text-green-600 mb-2" />
-              <h3 className="font-medium text-gray-900">Tesorería</h3>
-              <p className="text-sm text-gray-500 mt-1">Gestionar pagos</p>
-            </Link>
-            <Link href="/dashboard/admin/solicitudes-vinculacion" className="block p-4 border border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors">
-              <Settings size={24} className="text-purple-600 mb-2" />
-              <h3 className="font-medium text-gray-900">Administración</h3>
-              <p className="text-sm text-gray-500 mt-1">Configurar el sistema</p>
-            </Link>
-          </div>
+          ))}
         </div>
       </main>
     </div>

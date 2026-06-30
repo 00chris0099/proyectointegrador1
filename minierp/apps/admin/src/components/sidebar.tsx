@@ -7,72 +7,90 @@ import {
   LayoutDashboard,
   FileText,
   CreditCard,
-  Settings,
   User,
   Users,
   LinkIcon,
   LogOut,
-  ChevronLeft,
   ClipboardList,
   CheckCircle,
   History,
 } from 'lucide-react';
 
-const menuItems = [
+interface MenuItem {
+  label: string;
+  href: string;
+  icon: any;
+  roles: string[];
+}
+
+const menuItems: MenuItem[] = [
   {
     label: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
+    roles: ['Administrador', 'Secretaria', 'Direccion', 'Tesoreria', 'Apoderado'],
   },
   {
     label: 'Mis Alumnos',
     href: '/dashboard/alumnos',
     icon: Users,
+    roles: ['Apoderado'],
   },
   {
     label: 'Trámites',
     href: '/dashboard/tramites',
     icon: FileText,
+    roles: ['Apoderado'],
   },
   {
     label: 'Pagos',
     href: '/dashboard/tesoreria',
     icon: CreditCard,
+    roles: ['Tesoreria', 'Administrador'],
   },
   {
     label: 'Solicitudes Vinculación',
     href: '/dashboard/admin/solicitudes-vinculacion',
     icon: LinkIcon,
+    roles: ['Secretaria', 'Administrador'],
   },
   {
     label: 'Trámites Pendientes',
     href: '/dashboard/admin/tramites-pendientes',
     icon: ClipboardList,
+    roles: ['Secretaria', 'Administrador'],
   },
   {
     label: 'Trámites Derivados',
     href: '/dashboard/direccion/tramites-derivados',
     icon: CheckCircle,
+    roles: ['Direccion', 'Administrador'],
   },
   {
     label: 'Auditoría Documental',
     href: '/dashboard/admin/auditoria',
     icon: History,
+    roles: ['Direccion', 'Administrador'],
   },
   {
     label: 'Mi Perfil',
     href: '/dashboard/profile',
     icon: User,
+    roles: ['Administrador', 'Secretaria', 'Direccion', 'Tesoreria', 'Apoderado'],
   },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const userRoles = (session?.user as any)?.roles || [];
+
+  const filteredItems = menuItems.filter(item =>
+    item.roles.some(role => userRoles.includes(role))
+  );
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
-      {/* Logo */}
       <div className="p-6 border-b border-gray-200">
         <Link href="/dashboard" className="flex items-center gap-3">
           <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -85,9 +103,8 @@ export default function Sidebar() {
         </Link>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">
-        {menuItems.map((item) => {
+        {filteredItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
@@ -106,7 +123,6 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* User info & logout */}
       <div className="p-4 border-t border-gray-200">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
@@ -118,6 +134,9 @@ export default function Sidebar() {
             </p>
             <p className="text-xs text-gray-500 truncate">
               {session?.user?.email}
+            </p>
+            <p className="text-xs text-blue-600 font-medium">
+              {userRoles[0] || 'Sin rol'}
             </p>
           </div>
         </div>
